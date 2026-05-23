@@ -1,0 +1,93 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build folders
+dist/
+build/
+
+# Next.js
+.next/
+
+# Coverage
+coverage/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Temporary files
+tmp/
+temp/
+
+# Cache
+.cache/
+
+# MongoDB local files
+*.mongodb
+
+# Uploads
+uploads/
+
+# Optional lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# PM2
+.pm2/
+
+# Nodemon
+nodemon.json
+
+# Mac system files
+.AppleDouble
+.LSOverride
+
+# Linux files
+*~
+
+# Windows files
+ehthumbs.db
+Desktop.ini
+
+# ESLint cache
+.eslintcache
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Testing
+jest.config.js
+jest.setup.js
+
+# Docker
+docker-compose.override.yml
+
+# Misc
+*.tgz
+*.swp
