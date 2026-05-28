@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ReduxProvider from "@/src/lib/ReduxProvider";
 
 export const metadata: Metadata = {
   title: "Quantivo",
@@ -17,7 +18,9 @@ export default function RootLayout({
       className={``}
     >
       <body className="min-h-screen">
+        <ReduxProvider>
         {children}
+        </ReduxProvider>
       </body>
     </html>
   );
