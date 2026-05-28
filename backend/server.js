@@ -1,16 +1,29 @@
-require("dotenv").config();
+import dotenv from "dotenv";
 
-const app = require("./src/app")
-const connectDB = require("./src/config/db")
+dotenv.config();
 
-const port = process.env.PORT
+import app from "./src/app.js";
+import connectDB from "./src/config/db.js";
 
-connectDB().then(()=>{
-    console.log("Database Connection Established")
+const port = process.env.PORT || 5000;
 
-    app.listen(port, ()=>{
-        console.log("Server Successfully Listning on Port: ", port)
-    })
-}) .catch((error)=>{
-    console.log("Error Connecting to Database.")
-})
+connectDB()
+  .then(() => {
+
+    console.log("Database Connection Established");
+
+    app.listen(port, () => {
+
+      console.log(
+        `Server Successfully Listening on Port: ${port}`
+      );
+
+    });
+
+  })
+  .catch((error) => {
+
+    console.log("Error Connecting to Database.");
+    console.log(error);
+
+  });
