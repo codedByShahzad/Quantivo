@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FiMail,
   FiLock,
@@ -19,6 +20,8 @@ import toast from "react-hot-toast";
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -34,150 +37,132 @@ export default function LoginPage() {
   };
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const response = await login(formData).unwrap();
+  try {
+    const response = await login(formData).unwrap();
 
-      toast.success("Login successful!");
+    toast.success("Login successful!");
 
-      console.log(response);
-    } catch (err: any) {
-      toast.error(err?.data?.message || "Login failed");
-    }
-  };
+    console.log(response);
 
-  return (
-    <div className="min-h-screen bg-[#F8FAFC]">
-      <div className="grid min-h-screen lg:grid-cols-[720px_1fr]">
+    // Navigate to Shops page after login
+    router.push("/shops");
+  } catch (err: any) {
+    toast.error(err?.data?.message || "Login failed");
+  }
+};
+
+return (
+  <div className="relative min-h-screen overflow-hidden bg-slate-50">
+    {/* Background */}
+    
+
+    <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-8">
+      <div className="grid w-full max-w-360 items-center gap-12 lg:grid-cols-2">
         {/* LEFT SIDE */}
-        <div className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-[#F8FAFC] to-[#EEF4FF] px-8 py-6">
-          <div>
-            <Image
-              src="/assets/quantivo-logo.png"
-              alt="Quantivo"
-              width={170}
-              height={45}
-              priority
-            />
+        <div className="hidden lg:flex flex-col justify-center">
+          <Image
+            src="/assets/quantivo-logo.png"
+            alt="Quantivo"
+            width={180}
+            height={50}
+            priority
+          />
 
-            <div className="mt-6 inline-flex items-center gap-2 rounded-lg bg-blue-100 px-4 py-2 text-sm font-medium text-blue-600">
-              <LuShieldCheck size={16} />
-              Smart Business Management
-            </div>
-
-            <h1 className="mt-8 text-[38px] font-bold leading-[1.1] text-[#0F172A]">
-              Welcome Back!
-            </h1>
-
-            <p className="mt-5 max-w-md text-lg leading-relaxed text-slate-500">
-              Login to continue managing your business smarter and more
-              efficiently with Quantivo.
-            </p>
-
-            <div className="mt-8 flex justify-center">
-              <Image
-                src="/assets/loginside.png"
-                alt="Login"
-                width={450}
-                height={380}
-                className="h-auto object-contain"
-                priority
-              />
-            </div>
+          <div className="mt-8 inline-flex w-fit items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-medium text-blue-600 shadow-sm">
+            <LuShieldCheck size={16} />
+            Smart Business Management
           </div>
 
-          <div className="space-y-6">
-            <div className="flex items-start gap-5">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white shadow-sm">
-                <FiShield
-                  size={28}
-                  className="text-[#2563EB]"
-                />
-              </div>
+          <h1 className="mt-8 max-w-xl text-5xl font-bold leading-tight text-slate-900">
+            Manage Your Business
+            <span className="block text-blue-600">
+              Smarter Than Ever
+            </span>
+          </h1>
 
-              <div>
-                <h4 className="text-xl font-semibold text-slate-900">
-                  Secure & Reliable
-                </h4>
+          <p className="mt-6 max-w-lg text-lg leading-relaxed text-slate-500">
+            Manage inventory, sales, customers,
+            suppliers and analytics from one
+            powerful dashboard.
+          </p>
 
-                <p className="mt-1 text-base text-slate-500">
-                  Your data is safe with enterprise-grade security.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-5">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white shadow-sm">
-                <FiClock
-                  size={28}
-                  className="text-[#2563EB]"
-                />
-              </div>
-
-              <div>
-                <h4 className="text-xl font-semibold text-slate-900">
-                  Save Time
-                </h4>
-
-                <p className="mt-1 text-base text-slate-500">
-                  Automate tasks and manage everything in one place.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-5">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white shadow-sm">
-                <TbRocket
-                  size={28}
-                  className="text-[#2563EB]"
-                />
-              </div>
-
-              <div>
-                <h4 className="text-xl font-semibold text-slate-900">
-                  Grow Faster
-                </h4>
-
-                <p className="mt-1 text-base text-slate-500">
-                  Powerful insights to help your business scale.
-                </p>
-              </div>
-            </div>
+          <div className="mt-10">
+            <Image
+              src="/assets/loginside.png"
+              alt="Illustration"
+              width={650}
+              height={500}
+              priority
+              className="h-auto max-h-[500px] w-full max-w-[650px] object-contain"
+            />
           </div>
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="flex items-center justify-center bg-white px-5 py-10 sm:px-8">
-          <div className="w-full max-w-[500px]">
-            <div className="mb-8 text-center sm:text-right">
-              <p className="text-gray-500">
-                Don't have an account?{" "}
-                <Link
-                  href="/signup"
-                  className="font-semibold text-blue-600"
-                >
-                  Create Account
-                </Link>
-              </p>
+        <div className="flex justify-center lg:justify-end">
+          <div
+            className="
+              w-full
+              max-w-[460px]
+
+              rounded-[32px]
+
+              border
+              border-white/50
+
+              bg-white/80
+
+              p-8
+              md:p-10
+
+              backdrop-blur-xl
+
+              shadow-[0_20px_80px_rgba(15,23,42,0.08)]
+            "
+          >
+            {/* Mobile Logo */}
+            <div className="mb-8 flex justify-center lg:hidden">
+              <Image
+                src="/assets/quantivo-logo.png"
+                alt="logo"
+                width={160}
+                height={40}
+              />
             </div>
 
-            <div className="mb-10 text-center">
-              <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl">
-                Login to Your Account
+            {/* Header */}
+            <div className="mb-8">
+              <div className="flex justify-end">
+                <p className="text-sm text-slate-500">
+                  Don't have an account?{" "}
+                  <Link
+                    href="/signup"
+                    className="font-semibold text-blue-600 hover:text-blue-700"
+                  >
+                    Sign Up
+                  </Link>
+                </p>
+              </div>
+
+              <h2 className="mt-6 text-3xl font-bold text-slate-900">
+                Welcome Back
               </h2>
 
-              <p className="mt-3 text-base text-slate-500 sm:text-lg">
-                Enter your details to access your account
+              <p className="mt-2 text-slate-500">
+                Sign in to continue to Quantivo
               </p>
             </div>
 
+            {/* Form */}
             <form
               onSubmit={handleLogin}
               className="space-y-5"
             >
+              {/* Email */}
               <div>
-                <label className="mb-2 block font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700">
                   Email Address
                 </label>
 
@@ -193,13 +178,31 @@ export default function LoginPage() {
                     placeholder="Enter your email address"
                     value={formData.email}
                     onChange={handleChange}
-                    className="h-14 w-full rounded-xl border border-gray-200 bg-gray-50 pl-12 pr-4 shadow-sm transition-all duration-200 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="
+                      h-14
+                      w-full
+                      rounded-2xl
+                      border
+                      border-slate-200
+                      bg-slate-50
+                      pl-12
+                      pr-4
+                      text-slate-900
+                      transition-all
+
+                      focus:border-blue-500
+                      focus:bg-white
+                      focus:outline-none
+                      focus:ring-4
+                      focus:ring-blue-100
+                    "
                   />
                 </div>
               </div>
 
+              {/* Password */}
               <div>
-                <label className="mb-2 block font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700">
                   Password
                 </label>
 
@@ -210,18 +213,41 @@ export default function LoginPage() {
                   />
 
                   <input
-                    type={showPassword ? "text" : "password"}
+                    type={
+                      showPassword
+                        ? "text"
+                        : "password"
+                    }
                     name="password"
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="h-14 w-full rounded-xl border border-gray-200 bg-gray-50 pl-12 pr-12 shadow-sm transition-all duration-200 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="
+                      h-14
+                      w-full
+                      rounded-2xl
+                      border
+                      border-slate-200
+                      bg-slate-50
+                      pl-12
+                      pr-12
+                      text-slate-900
+                      transition-all
+
+                      focus:border-blue-500
+                      focus:bg-white
+                      focus:outline-none
+                      focus:ring-4
+                      focus:ring-blue-100
+                    "
                   />
 
                   <button
                     type="button"
                     onClick={() =>
-                      setShowPassword(!showPassword)
+                      setShowPassword(
+                        !showPassword
+                      )
                     }
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
                   >
@@ -234,28 +260,90 @@ export default function LoginPage() {
                 </div>
               </div>
 
+              {/* Forgot Password */}
               <div className="flex justify-end">
                 <button
                   type="button"
-                  className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                  className="text-sm font-medium text-slate-500 hover:text-blue-600"
                 >
                   Forgot Password?
                 </button>
               </div>
 
+              {/* Submit */}
               <button
                 type="submit"
                 disabled={isLoading}
-                className="h-14 w-full rounded-xl bg-gradient-to-r from-[#2563EB] to-[#3B82F6] text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.01] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-70"
+                className="
+                  h-14
+                  w-full
+
+                  rounded-2xl
+
+                  bg-gradient-to-r
+                  from-blue-600
+                  to-indigo-600
+
+                  font-semibold
+                  text-white
+
+                  shadow-lg
+                  shadow-blue-200
+
+                  transition-all
+                  duration-300
+
+                  hover:-translate-y-0.5
+                  hover:shadow-xl
+
+                  disabled:cursor-not-allowed
+                  disabled:opacity-70
+                "
               >
-                {isLoading ? "Logging In..." : "Login"}
+                {isLoading
+                  ? "Logging In..."
+                  : "Login"}
               </button>
             </form>
 
-            <div className="mt-8 text-center text-sm text-slate-500">
-              By logging in, you agree to our{" "}
+            {/* Features */}
+            <div className="mt-8 grid grid-cols-3 gap-4 border-t border-slate-100 pt-6">
+              <div className="text-center">
+                <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
+                  <FiShield className="text-blue-600" />
+                </div>
+
+                <p className="text-xs font-medium text-slate-600">
+                  Secure
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
+                  <FiClock className="text-blue-600" />
+                </div>
+
+                <p className="text-xs font-medium text-slate-600">
+                  Fast
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
+                  <TbRocket className="text-blue-600" />
+                </div>
+
+                <p className="text-xs font-medium text-slate-600">
+                  Smart
+                </p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="mt-6 text-center text-xs text-slate-500">
+              By continuing, you agree to our{" "}
               <span className="font-medium text-blue-600">
-                Terms of Service
+                Terms
               </span>{" "}
               and{" "}
               <span className="font-medium text-blue-600">
@@ -266,5 +354,6 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }
