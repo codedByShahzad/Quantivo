@@ -38,3 +38,35 @@ export const createShop = async (req, res) => {
     });
   }
 };
+
+
+export const getAllShops = async (req, res) => {
+    try {
+        const user = req.userId;
+
+        const allShops = await Shop.find({
+            ownerId: user,
+        });
+
+        if (allShops.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No Shops Available",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            count: `Total Shops: ${allShops.length}`,
+            data: allShops,
+        });
+
+    } catch (error) {
+        console.log(error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+        });
+    }
+};
