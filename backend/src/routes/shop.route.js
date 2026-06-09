@@ -1,4 +1,5 @@
 import express from "express";
+import upload from "../middlewares/multer.js";
 
 import { createShopValidation } from "../validations/shop.validation.js";
 import { validate } from "../middlewares/validate.js";
@@ -7,7 +8,7 @@ import { createShop, getAllShops } from "../controllers/shop.controller.js";
 
 const router = express.Router();
 
-router.post("/createshop", isAuthenticated, createShopValidation, validate, createShop);
+router.post("/createshop", isAuthenticated, upload.single("logo"),createShopValidation, validate, createShop);
 router.get("/getAllShops", isAuthenticated, getAllShops);
 
 export default router;
