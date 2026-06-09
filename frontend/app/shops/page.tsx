@@ -1,6 +1,8 @@
 "use client";
 
+import CreateShopModal from "@/src/components/CreateShopModel";
 import DashboardNavbar from "@/src/components/DashboardNavbar";
+import { useCreateShopMutation } from "@/src/features/api/shopApi";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -14,50 +16,57 @@ import {
   FiSearch,
 } from "react-icons/fi";
 
-const shops = [
-  {
-    _id: "shop_001",
-    shopName: "ABC Super Store",
-    ownerId: "user_001",
-    logo: "https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=1000",
-    phone: "+92 300 1234567",
-    address: "Blue Area, Islamabad, Pakistan",
-    totalEmployees: "18",
-    businessType: "Retail Store",
-    subscriptionPlan: "Premium",
-    subscriptionStatus: "Active",
-    createdAt: "2026-06-07T10:00:00.000Z",
-  },
-  {
-    _id: "shop_002",
-    shopName: "Fresh Mart",
-    ownerId: "user_001",
-    logo: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=1000",
-    phone: "+92 321 7654321",
-    address: "Saddar, Rawalpindi, Pakistan",
-    totalEmployees: "10",
-    businessType: "Grocery Store",
-    subscriptionPlan: "Basic",
-    subscriptionStatus: "Active",
-    createdAt: "2026-06-05T10:00:00.000Z",
-  },
-  {
-    _id: "shop_003",
-    shopName: "Tech World",
-    ownerId: "user_001",
-    logo: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1000",
-    phone: "+92 333 9876543",
-    address: "Main Boulevard, Lahore, Pakistan",
-    totalEmployees: "25",
-    businessType: "Electronics",
-    subscriptionPlan: "Enterprise",
-    subscriptionStatus: "Active",
-    createdAt: "2026-06-01T10:00:00.000Z",
-  },
-];
+
+
+interface ShopData {
+  shopName: string;
+  phone: string;
+  address: string;
+  totalEmployees: string;
+  businessType: string;
+  logo: File | null;
+}
+
+
 export default function ShopsPage() {
   const [open, setOpen] = useState(false);
 
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  console.log(setShowCreateModal);
+
+  const [createShop, {isLoading}] = useCreateShopMutation();
+
+  const [shopData, setShopData] = useState<ShopData>({
+    shopName: "",
+    phone: "",
+    address: "",
+    totalEmployees: "",
+    businessType: "",
+    logo: null,
+  });
+
+ const handleCreateShop = async () => {
+  try {
+    const formData = new FormData();
+
+    formData.append("shopName", shopData.shopName);
+    formData.append("phone", shopData.phone);
+    formData.append("address", shopData.address);
+    formData.append("totalEmployees", shopData.totalEmployees);
+    formData.append("businessType", shopData.businessType);
+
+    if (shopData.logo) {
+      formData.append("logo", shopData.logo);
+    }
+
+    await createShop(formData).unwrap();
+
+    setShowCreateModal(false);
+  } catch (err) {
+    console.log(err);
+  }
+};
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* Background */}
@@ -247,30 +256,27 @@ export default function ShopsPage() {
             </p>
           </div>
 
-          <Link
-            href="/shops/create"
+          <button
+            onClick={() => setShowCreateModal(true)}
             className="
-            flex
-            h-12
-            items-center
-            justify-center
-            border
-            border-blue-600
-bg-blue-50
- text-blue-600
-rounded-md
-            px-6
-
-            font-semibold
-
-            transition-all
-
-            hover:bg-blue-700
-            hover:text-white
-          "
+        flex
+        h-12
+        items-center
+        justify-center
+        rounded-md
+        border
+        border-blue-600
+        bg-blue-50
+        px-6
+        font-semibold
+        text-blue-600
+        transition-all
+        hover:bg-blue-700
+        hover:text-white
+    "
           >
             + Create New Shop
-          </Link>
+          </button>
         </div>
 
         {/* Workspace Section */}
@@ -285,11 +291,11 @@ rounded-md
 
         {/* Cards */}
 
-        <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
-  {shops.map((shop) => (
-    <div
-      key={shop._id}
-      className="
+        {/* <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+          {shopData.map((shop) => (
+            <div
+              key={shop._id}
+              className="
         group
 
         rounded-3xl
@@ -307,12 +313,11 @@ rounded-md
         hover:border-blue-600
         hover:shadow-lg
       "
-    >
-      {/* Top */}
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-4">
-          <div
-            className="
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-4">
+                  <div
+                    className="
               flex
               h-14
               w-14
@@ -329,84 +334,53 @@ rounded-md
               font-bold
               text-white
             "
-          >
-            {shop.shopName.charAt(0)}
-          </div>
+                  >
+                    {shop.shopName.charAt(0)}
+                  </div>
 
-          <div>
-            <h3 className="font-bold text-slate-900">
-              {shop.shopName}
-            </h3>
+                  <div>
+                    <h3 className="font-bold text-slate-900">
+                      {shop.shopName}
+                    </h3>
 
-            <p className="text-sm text-slate-500">
-              {shop.businessType}
-            </p>
-          </div>
-        </div>
+                    <p className="text-sm text-slate-500">
+                      {shop.businessType}
+                    </p>
+                  </div>
+                </div>
 
-        <span className="rounded-full border border-green-600 bg-green-50 px-3 py-1 text-xs font-semibold text-green-600">
-          Active
-        </span>
-      </div>
+                <span className="rounded-full border border-green-600 bg-green-50 px-3 py-1 text-xs font-semibold text-green-600">
+                  Active
+                </span>
+              </div>
 
-      {/* Address */}
-      <div className="mt-6 rounded-2xl bg-slate-50 p-4">
-        <p className="text-xs uppercase tracking-wide text-slate-400">
-          Address
-        </p>
+              <div className="mt-6 rounded-2xl bg-slate-50 p-4">
+                <p className="text-xs uppercase tracking-wide text-slate-400">
+                  Address
+                </p>
 
-        <p className="mt-2 text-sm text-slate-600">
-          {shop.address}
-        </p>
-      </div>
+                <p className="mt-2 text-sm text-slate-600">{shop.address}</p>
+              </div>
 
-      {/* Info */}
-      <div className="mt-6 grid grid-cols-2 gap-4">
-        <div>
-          <p className="text-xs text-slate-400">
-            Employees
-          </p>
+              <div className="mt-6 grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs text-slate-400">Employees</p>
 
-          <p className="font-semibold text-slate-900">
-            {shop.totalEmployees}
-          </p>
-        </div>
+                  <p className="font-semibold text-slate-900">
+                    {shop.totalEmployees}
+                  </p>
+                </div>
 
-        <div>
-          <p className="text-xs text-slate-400">
-            Plan
-          </p>
+                <div>
+                  <p className="text-xs text-slate-400">Phone</p>
 
-          <p className="font-semibold text-slate-900">
-            {shop.subscriptionPlan}
-          </p>
-        </div>
+                  <p className="font-semibold text-slate-900">{shop.phone}</p>
+                </div>
+              </div>
 
-        <div>
-          <p className="text-xs text-slate-400">
-            Phone
-          </p>
-
-          <p className="font-semibold text-slate-900">
-            {shop.phone}
-          </p>
-        </div>
-
-        <div>
-          <p className="text-xs text-slate-400">
-            Created
-          </p>
-
-          <p className="font-semibold text-slate-900">
-            {new Date(shop.createdAt).toLocaleDateString()}
-          </p>
-        </div>
-      </div>
-
-      {/* Button */}
-      <Link
-        href={`/shops/${shop._id}/dashboard`}
-        className="
+              <Link
+                href={`/shops/${shop._id}/dashboard`}
+                className="
           mt-6
 
           flex
@@ -433,13 +407,23 @@ rounded-md
           group-hover:text-white
           group-hover:border-blue-600
         "
-      >
-        Open Workspace →
-      </Link>
-    </div>
-  ))}
-</div>
+              >
+                Open Workspace →
+              </Link>
+            </div>
+          ))}
+        </div> */}
       </div>
+
+      {showCreateModal && (
+        <CreateShopModal
+          open={showCreateModal}
+          setOpen={setShowCreateModal}
+          shopData={shopData}
+          setShopData={setShopData}
+          onSubmit={handleCreateShop}
+        />
+      )}
     </div>
   );
 }
