@@ -11,7 +11,7 @@ export const shopApi = baseApi.injectEndpoints({
             })
         }),
 
-        getAllShops: builder.query({
+        getAllShops: builder.query<any, void>({
             query: ()=>({
                 url: "/shop/getAllShops",
                 method: "GET",

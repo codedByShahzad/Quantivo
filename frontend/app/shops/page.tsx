@@ -2,7 +2,10 @@
 
 import CreateShopModal from "@/src/components/CreateShopModel";
 import DashboardNavbar from "@/src/components/DashboardNavbar";
-import { useCreateShopMutation } from "@/src/features/api/shopApi";
+import {
+  useCreateShopMutation,
+  useGetAllShopsQuery,
+} from "@/src/features/api/shopApi";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -16,8 +19,6 @@ import {
   FiSearch,
 } from "react-icons/fi";
 
-
-
 interface ShopData {
   shopName: string;
   phone: string;
@@ -27,7 +28,6 @@ interface ShopData {
   logo: File | null;
 }
 
-
 export default function ShopsPage() {
   const [open, setOpen] = useState(false);
 
@@ -35,7 +35,7 @@ export default function ShopsPage() {
 
   console.log(setShowCreateModal);
 
-  const [createShop, {isLoading}] = useCreateShopMutation();
+  const [createShop, { isLoading }] = useCreateShopMutation();
 
   const [shopData, setShopData] = useState<ShopData>({
     shopName: "",
@@ -46,29 +46,35 @@ export default function ShopsPage() {
     logo: null,
   });
 
- const handleCreateShop = async () => {
-  try {
-    const formData = new FormData();
+  const { data, refetch, isError } = useGetAllShopsQuery();
 
-    formData.append("shopName", shopData.shopName);
-    formData.append("phone", shopData.phone);
-    formData.append("address", shopData.address);
-    formData.append("totalEmployees", shopData.totalEmployees);
-    formData.append("businessType", shopData.businessType);
+  const shops = data?.data || [];
 
-    if (shopData.logo) {
-      formData.append("logo", shopData.logo);
+  const handleCreateShop = async () => {
+    try {
+      const formData = new FormData();
+
+      formData.append("shopName", shopData.shopName);
+      formData.append("phone", shopData.phone);
+      formData.append("address", shopData.address);
+      formData.append("totalEmployees", shopData.totalEmployees);
+      formData.append("businessType", shopData.businessType);
+
+      if (shopData.logo) {
+        formData.append("logo", shopData.logo);
+      }
+
+      await createShop(formData).unwrap();
+
+      refetch();
+
+      setShowCreateModal(false);
+    } catch (err) {
+      console.log(err);
     }
-
-    await createShop(formData).unwrap();
-
-    setShowCreateModal(false);
-  } catch (err) {
-    console.log(err);
-  }
-};
+  };
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-slate-50 relative overflow-x-hidden">
       {/* Background */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute -top-52 -left-52 h-[500px] w-[500px] rounded-full bg-blue-100 blur-3xl opacity-70" />
@@ -89,7 +95,7 @@ export default function ShopsPage() {
             <Image
               src="/assets/quantivo-logo.png"
               alt="Quantivo Logo"
-              width={150}
+              width={120}
               height={45}
               className="h-auto w-auto"
               priority
@@ -291,8 +297,8 @@ export default function ShopsPage() {
 
         {/* Cards */}
 
-        {/* <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
-          {shopData.map((shop) => (
+        <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+          {shops.map((shop: any) => (
             <div
               key={shop._id}
               className="
@@ -316,26 +322,21 @@ export default function ShopsPage() {
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
-                  <div
-                    className="
-              flex
-              h-14
-              w-14
-              items-center
-              justify-center
-
-              rounded-2xl
-
-              bg-gradient-to-br
-              from-blue-600
-              to-indigo-600
-
-              text-lg
-              font-bold
-              text-white
-            "
-                  >
-                    {shop.shopName.charAt(0)}
+                  <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-slate-100 shrink-0">
+                    {shop.logo ? (
+                      <Image
+                        src={shop.logo}
+                        alt={shop.shopName}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center">
+                        <span className="text-lg font-bold text-slate-700">
+                          {shop.shopName.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div>
@@ -412,18 +413,19 @@ export default function ShopsPage() {
               </Link>
             </div>
           ))}
-        </div> */}
+        </div>
       </div>
 
       {showCreateModal && (
-        <CreateShopModal
-          open={showCreateModal}
-          setOpen={setShowCreateModal}
-          shopData={shopData}
-          setShopData={setShopData}
-          onSubmit={handleCreateShop}
-        />
-      )}
+  <CreateShopModal
+    open={showCreateModal}
+    setOpen={setShowCreateModal}
+    shopData={shopData}
+    setShopData={setShopData}
+    onSubmit={handleCreateShop}
+    isLoading={isLoading}
+  />
+)}
     </div>
   );
 }
