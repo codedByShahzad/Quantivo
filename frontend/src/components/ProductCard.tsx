@@ -14,36 +14,47 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:shadow-md">
+
+      {/* Product Image */}
+
       <div className="flex justify-center">
         <Image
           src={product.image}
           alt={product.name}
-          width={100}
-          height={100}
-          className="h-40 w-40 object-contain"
+          width={80}
+          height={80}
+          className="h-24 w-24 object-contain"
         />
       </div>
 
-      <h3 className="mt-4 text-lg text-slate-800">
+      {/* Product Name */}
+
+      <h3 className="mt-3 text-base font-medium text-slate-800 line-clamp-2">
         {product.name}
       </h3>
 
-      <p className="mt-3 text-2xl font-semibold text-slate-900">
+      {/* Price */}
+
+      <p className="mt-2 text-xl font-semibold text-slate-900">
         Rs. {product.price.toLocaleString()}
       </p>
 
-      <p className="mt-2 text-lg text-green-500">
-        {product.stock} pcs
+      {/* Stock */}
+
+      <p className="mt-1 text-sm font-medium text-green-500">
+        {product.stock} pcs available
       </p>
 
-      <div className="mt-5 flex items-center justify-between">
-        <span className="rounded-full bg-blue-50 px-4 py-2 text-sm font-medium text-blue-600">
+      {/* Bottom */}
+
+      <div className="mt-4 flex items-center justify-between">
+        <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
           {product.category}
         </span>
 
         <button className="rounded-lg border border-slate-200 p-2 transition hover:bg-slate-100">
-          <BsThreeDotsVertical />
+          <BsThreeDotsVertical className="text-sm" />
         </button>
       </div>
     </div>

@@ -99,9 +99,9 @@ export default function Page() {
   const shopId = params.shopId as string;
   return (
     <div>
-      <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between ">
+      <div className="flex flex-col gap-6 md:flex-row justify-center items-center md:justify-between ">
         {/* Left Side */}
-        <div>
+        <div className="text-center md:text-left">
           <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900">
             Dashboard
           </h1>
@@ -112,7 +112,7 @@ export default function Page() {
         </div>
 
         {/* Right Side */}
-        <div className="relative self-start md:self-auto">
+        <div className="relative md:self-start">
           <DatePicker
             selected={date}
             onChange={(date: any) => setDate(date)}
@@ -132,7 +132,7 @@ export default function Page() {
           />
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 xl:grid-cols-4 mt-8">
+      <div className="grid grid-cols-2 gap-2 md:gap-6 sm:grid-cols-2 xl:grid-cols-4 mt-8">
         {stats.map((item, index) => (
           <div
             key={index}
@@ -151,7 +151,7 @@ export default function Page() {
                 {item.title}
               </h3>
 
-              <p className="mt-1 text-4xl font-semibold text-slate-900">
+              <p className="mt-1 text-3xl font-semibold text-slate-900">
                 {item.value}
               </p>
 
@@ -168,14 +168,14 @@ export default function Page() {
       </div>
 
       <div>
-        <div className="mt-8 p-6 border border-slate-200 rounded-2xl bg-white">
+        <div className="mt-8 md:p-6 md:border border-slate-200 rounded-2xl md:bg-white">
           <div className="flex justify-between items-center pb-6">
             <h1 className="text-2xl font-semibold ">Products</h1>
             <button
                 onClick={() =>
                   router.push(`/shops/${shopId}/dashboard/products`)
                 }
-                className="flex items-center gap-2 rounded-md bg-white border border-blue-600 px-4 py-2  font-medium text-blue-600 transition hover:bg-blue-600 hover:text-white"
+                className="flex items-center gap-2 rounded-md bg-white border border-blue-600 px-2 md:px-4 py-2 text-xs md:text-base font-medium text-blue-600 transition hover:bg-blue-600 hover:text-white"
               >
                 View More Products
               </button>
@@ -210,7 +210,7 @@ export default function Page() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2 md:gap-4 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
               {products.map((product, index) => (
                 <ProductCard key={index} product={product} />
               ))}
